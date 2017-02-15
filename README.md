@@ -5,10 +5,10 @@ We are trying to sort of recreate Socket.IO within Java for game development or 
 This provides an easy way to start working with networking with out the need of knowing anything about sockets.
 
 ## Table of Contents
-*[Tutorial](#tutorial)
-..*[Setting up the server](#setting-up-the-server) 
-..*[Setting up the client](#setting-up-the-client)
-..*[Communicating](#communicating)
+* [Tutorial](#tutorial)
+* [Setting up the server](#setting-up-the-server) 
+* [Setting up the client](#setting-up-the-client)
+* [Communicating](#communicating)
 
 ## Tutorial
 
