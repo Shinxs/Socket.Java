@@ -21,7 +21,7 @@ public class Socket implements Runnable {
 	protected int port;
 	protected Thread t;
 	
-	public HashMap<String, NetworkCallback> events = new HashMap<String, NetworkCallback>();
+	private HashMap<String, NetworkCallback> events = new HashMap<String, NetworkCallback>();
 	
 	public Socket(String hostname, int port) throws UnknownHostException, IOException {
 		this.hostname = hostname;
