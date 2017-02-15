@@ -38,6 +38,14 @@ public class Socket implements Runnable {
 		throw new Exception("Not yet implemented");
 	}
 
+	public synchronized void close() {
+		try {
+			t.join();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+	}
+	
 	@Override
 	public void run() {
 		if(this instanceof Client) {
