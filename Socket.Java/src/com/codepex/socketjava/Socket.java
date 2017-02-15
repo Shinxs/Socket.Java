@@ -47,7 +47,7 @@ public class Socket implements Runnable {
 		}
 	}
 	
-	public void checkClient(Client c) {
+	protected void checkClient(Client c) {
 		try {
 			// Get the message from stream
 			String message = (String) c.in.readObject();
