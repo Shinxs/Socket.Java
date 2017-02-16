@@ -9,11 +9,7 @@ import java.util.Base64;
 public class Client extends Socket {
 	
 	public Client(String hostname, int port) throws UnknownHostException, IOException {
-		super(hostname, port);
-		this.csocket = new java.net.Socket(hostname, port);
-		this.out = new ObjectOutputStream(csocket.getOutputStream());
-		this.in = new ObjectInputStream(csocket.getInputStream());
-		this.thread.start();
+		this(new java.net.Socket(hostname, port));
 	}
 	
 	public Client(java.net.Socket socket) throws UnknownHostException, IOException {
@@ -21,23 +17,29 @@ public class Client extends Socket {
 		this.csocket = socket;
 		this.out = new ObjectOutputStream(csocket.getOutputStream());
 		this.in = new ObjectInputStream(csocket.getInputStream());
-		this.thread.start();
+		
+	}
+	
+	public synchronized void open() {
+		thread.start();
 	}
 	
 	@Override
 	public void send(String name, String body, boolean nobase64) {
-		String addon = "[p]";
-		if(!nobase64) {
-			name = Base64.getEncoder().encodeToString(name.getBytes());
-			body = Base64.getEncoder().encodeToString(body.getBytes());
-			addon = "[b64]";
-		}
-		
-		try {
-			out.writeObject("[%]"+name+"[%][%]"+body+"[%]"+addon);
-			out.flush();
-		} catch (IOException e) {
-			e.printStackTrace();
+		if(csocket.isConnected() && thread.isAlive()) {
+			String addon = "[p]";
+			if(!nobase64) {
+				name = Base64.getEncoder().encodeToString(name.getBytes());
+				body = Base64.getEncoder().encodeToString(body.getBytes());
+				addon = "[b64]";
+			}
+			
+			try {
+				out.writeObject("[%]"+name+"[%][%]"+body+"[%]"+addon);
+				out.flush();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 	

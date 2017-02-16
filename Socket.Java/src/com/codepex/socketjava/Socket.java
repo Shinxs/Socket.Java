@@ -28,7 +28,7 @@ public class Socket implements NetworkSocket {
 		this.hostname = hostname;
 		this.port = port;
 		this.clients = new ArrayList<Client>();
-		thread = new Thread(this);
+		this.thread = new Thread(this);
 	}
 	
 	public void on(String name, NetworkCallback callback) {

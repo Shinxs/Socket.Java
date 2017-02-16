@@ -43,7 +43,12 @@ public class Server extends Socket {
 			java.net.Socket socket;
 			try {
 				socket = ssocket.accept();
-				clients.add(new Client(socket));
+				Client c = new Client(socket);
+				clients.add(c);
+				
+				// Sending a connection successful message
+				c.out.writeObject("[%]connected[%][%]successful[%]");
+				c.out.flush();
 			} catch (IOException e) {
 			}
 			
