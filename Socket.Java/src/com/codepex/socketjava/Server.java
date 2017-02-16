@@ -3,25 +3,39 @@ package com.codepex.socketjava;
 import java.io.IOException;
 import java.net.UnknownHostException;
 
+import com.sun.org.apache.xerces.internal.impl.dv.util.Base64;
+
 public class Server extends Socket {
 	
 	public Server(String hostname, int port) throws UnknownHostException, IOException {
 		super(hostname, port);
 		this.ssocket = new java.net.ServerSocket(port);
 		this.ssocket.setSoTimeout(100);
-		this.t.start();
+		this.thread.start();
 	}
 	
 	@Override
-	public void send(String name, String message) {
+	public void send(String name, String body, boolean nobase64) {
+		String addon = "[p]";
+		if(!nobase64) {
+			name = Base64.encode(name.getBytes());
+			body = Base64.encode(body.getBytes());
+			addon = "[b64]";
+		}
+		
 		for(Client c : clients) {
 			try {
-				c.out.writeObject("[%]"+name+"[%][%]"+message+"[%]");
+				c.out.writeObject("[%]"+name+"[%][%]"+body+"[%]"+addon);
 				c.out.flush();
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
 		}
+	}
+	
+	@Override
+	public synchronized void close() throws IOException {
+		ssocket.close();
 	}
 	
 	@Override
@@ -40,7 +54,7 @@ public class Server extends Socket {
 		}
 		
 		try {
-			t.join();
+			thread.join();
 		} catch(Exception e) {
 			e.printStackTrace();
 		}

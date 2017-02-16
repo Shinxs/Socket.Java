@@ -10,7 +10,9 @@ import java.util.HashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class Socket implements Runnable {
+import com.sun.org.apache.xerces.internal.impl.dv.util.Base64;
+
+public class Socket implements NetworkSocket {
 	
 	protected java.net.Socket csocket;
 	protected java.net.ServerSocket ssocket;
@@ -19,7 +21,7 @@ public class Socket implements Runnable {
 	protected ObjectInputStream in;
 	protected String hostname;
 	protected int port;
-	protected Thread t;
+	protected Thread thread;
 	
 	private HashMap<String, NetworkCallback> events = new HashMap<String, NetworkCallback>();
 	
@@ -27,23 +29,19 @@ public class Socket implements Runnable {
 		this.hostname = hostname;
 		this.port = port;
 		this.clients = new ArrayList<Client>();
-		t = new Thread(this);
+		thread = new Thread(this);
 	}
 	
 	public void on(String name, NetworkCallback callback) {
 		events.put(name, callback);
 	}
 	
-	public void send(String name, String body) throws Exception {
+	public void send(String name, String body, boolean nobase64) throws Exception {
 		throw new Exception("Not yet implemented");
 	}
 
-	public synchronized void close() {
-		try {
-			t.join();
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
+	public synchronized void close() throws InterruptedException, IOException {
+		thread.join();
 	}
 	
 	@Override
@@ -69,6 +67,12 @@ public class Socket implements Runnable {
 				
 				String name = values.get(0);
 				String body = values.get(1);
+				
+				if(message.endsWith("[b64]")) {
+					name = Base64.encode(name.getBytes());
+					body = Base64.encode(body.getBytes());
+				}
+				
 				if(events.containsKey(name)) {
 					events.get(name).receive(body);
 				}
