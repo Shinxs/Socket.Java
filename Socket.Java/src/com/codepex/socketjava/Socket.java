@@ -1,16 +1,15 @@
 package com.codepex.socketjava;
 
-import java.util.List;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.HashMap;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import com.sun.org.apache.xerces.internal.impl.dv.util.Base64;
 
 public class Socket implements NetworkSocket {
 	
@@ -69,8 +68,8 @@ public class Socket implements NetworkSocket {
 				String body = values.get(1);
 				
 				if(message.endsWith("[b64]")) {
-					name = Base64.encode(name.getBytes());
-					body = Base64.encode(body.getBytes());
+					name = Base64.getEncoder().encodeToString(name.getBytes());
+					body = Base64.getEncoder().encodeToString(body.getBytes());
 				}
 				
 				if(events.containsKey(name)) {

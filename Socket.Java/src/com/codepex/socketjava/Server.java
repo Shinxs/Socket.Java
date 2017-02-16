@@ -2,8 +2,7 @@ package com.codepex.socketjava;
 
 import java.io.IOException;
 import java.net.UnknownHostException;
-
-import com.sun.org.apache.xerces.internal.impl.dv.util.Base64;
+import java.util.Base64;
 
 public class Server extends Socket {
 	
@@ -18,8 +17,8 @@ public class Server extends Socket {
 	public void send(String name, String body, boolean nobase64) {
 		String addon = "[p]";
 		if(!nobase64) {
-			name = Base64.encode(name.getBytes());
-			body = Base64.encode(body.getBytes());
+			name = Base64.getEncoder().encodeToString(name.getBytes());
+			body = Base64.getEncoder().encodeToString(body.getBytes());
 			addon = "[b64]";
 		}
 		
