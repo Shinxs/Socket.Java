@@ -68,8 +68,8 @@ public class Socket implements NetworkSocket {
 				String body = values.get(1);
 				
 				if(message.endsWith("[b64]")) {
-					name = Base64.getEncoder().encodeToString(name.getBytes());
-					body = Base64.getEncoder().encodeToString(body.getBytes());
+					name = new String(Base64.getDecoder().decode(name.getBytes()));
+					body = new String(Base64.getDecoder().decode(body.getBytes()));
 				}
 				
 				if(events.containsKey(name)) {
