@@ -60,3 +60,30 @@ We have a boolean called nobase64 which will toggle a function that will encrypt
 
 If we now run this we will see "world!" displayed in the console.
 We can also call .on(String eventName, NetworkCallback networkCallback) on the client and the .send(String eventName, String message, boolean nobase64) on the server in order to communicate back and forwards.
+
+#### Full code
+Here we have the full code:
+```java
+public class Main {
+	public static void main(String[] args) {
+		try {
+			Server server = new Server("0.0.0.0", 5555);
+			Client client = new Client("127.0.0.1", 5555);
+			
+			client.open();
+			
+			server.on("hello", new NetworkCallback() {
+				@Override
+				public void receive(String body) {
+					System.out.println(body);
+				}
+			});
+			
+			client.send("hello", "world!", true);
+			client.send("hello", "world!", false);
+		} catch(Exception e) {
+			
+		}
+	}
+}
+```
